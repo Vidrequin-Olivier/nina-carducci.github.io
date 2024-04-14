@@ -114,11 +114,18 @@
       }
     },
     openLightBox(element, lightboxId) {
+      let src = element.attr('src');
+      if (element.parent('picture').length) {
+        src = element.parent('picture').find('source').attr('srcset');
+        if (!src) {
+          src = element.parent('picture').find('img').attr('src');
+        }
+      }
       $(`#${lightboxId}`)
-        .find(".lightboxImage")
-        .attr("src", element.attr("src"));
-      $(`#${lightboxId}`).modal("toggle");
-    },
+        .find('.lightboxImage')
+        .attr('src', src);
+      $(`#${lightboxId}`).modal('toggle');
+    },        
     prevImage() {
       let activeImage = null;
       $("img.gallery-item").each(function() {
