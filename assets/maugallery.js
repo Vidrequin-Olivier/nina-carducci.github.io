@@ -125,8 +125,9 @@
         .find('.lightboxImage')
         .attr('src', src);
       $(`#${lightboxId}`).modal('toggle');
-    },        
+    },
     prevImage() {
+      console.log("previousImage est appelée");
       let activeImage = null;
       $("img.gallery-item").each(function() {
         if ($(this).attr("src") === $(".lightboxImage").attr("src")) {
@@ -136,12 +137,15 @@
       let activeTag = $(".tags-bar span.active-tag").data("images-toggle");
       let imagesCollection = [];
       if (activeTag === "all") {
+        console.log(`activeTag vaut: ${activeTag}`);
         $(".item-column").each(function() {
           if ($(this).children("img").length) {
             imagesCollection.push($(this).children("img"));
           }
         });
+        console.log(`imagesCollections contient ${imagesCollection.length} éléments: ${imagesCollection}`);
       } else {
+        console.log(`activeTag vaut: ${activeTag}`);
         $(".item-column").each(function() {
           if (
             $(this)
@@ -151,6 +155,7 @@
             imagesCollection.push($(this).children("img"));
           }
         });
+        console.log(`imagesCollections contient ${imagesCollection.length} éléments: ${imagesCollection}`);
       }
       let index = 0,
         next = null;
@@ -158,12 +163,19 @@
       $(imagesCollection).each(function(i) {
         if ($(activeImage).attr("src") === $(this).attr("src")) {
           index = i ;
+          console.log(`en parcourant imagesCollection, quand ($(activeImage).attr("src") === $(this).attr("src")), l'index vaut: ${index}`);
         }
       });
       next =
         imagesCollection[index] ||
         imagesCollection[imagesCollection.length - 1];
+        console.log(`next doit contenir l'adresse de l'image précédente. src vaut: ${next}`);
       $(".lightboxImage").attr("src", $(next).attr("src"));
+      
+      // obtenir la valeur de lightboxId à partir de l'élément de la modale
+      const lightboxId = $('#' + $.fn.mauGallery.defaults.lightboxId).attr('id');
+      // utiliser openLightBox pour mettre à jour l'image affichée dans la modale
+      $.fn.mauGallery.methods.openLightBox($(next), lightboxId);
     },
     nextImage() {
       let activeImage = null;
